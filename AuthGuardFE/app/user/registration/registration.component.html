@@ -1,0 +1,62 @@
+<!-- <p>registration works!</p> -->
+ <div class="mb-4 ">
+    <div class="h2 text-success">
+        SignUp
+     </div>
+     <div>Already have an Account?
+        <a routerLink="../SignIn" class="text-decoration-none fw-medium text-success">SignIn</a>
+     </div>
+ </div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <input class="form-control bg-body-secondary" 
+        placeholder="Full Name" formControlName="fullName">
+        <div class="error-feedback" *ngIf="hasDisplayableError('fullName') && form.controls.fullName.hasError('required')">Please enter the FullName</div>
+    </div>
+    <div class="mb-3">
+        <input class="form-control bg-body-secondary" 
+        placeholder="Email" formControlName="email">
+        <!-- handling the errors in angular through reative forms 
+        here we are using the function called has hasDisplayableError for when to displayerrors -->
+        <div class="error-feedback" *ngIf="hasDisplayableError('email')">
+            <!-- // nested with conditions/ type of errors which occured
+            // one for not providing the email at all -->
+            <div class="error-feedback" *ngIf="form.controls.email.hasError('required')">Please enter the Email Address</div>
+            <!-- // other is for not providing the proper email -->
+            <div class="error-feedback" *ngIf="form.controls.email.hasError('email')">Please enter the Valid Email Address</div>
+        </div>
+
+        
+    </div>
+    <div class="mb-3">
+        <div class="input-group">
+            <input [type]="passwordVisible ? 'text' : 'password'" class="form-control bg-body-secondary" 
+        placeholder="Password" formControlName="password">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
+                <i class="bi bi-eye-slash" *ngIf="passwordVisible"></i>
+                <i class="bi bi-eye" *ngIf="!passwordVisible"></i>
+              </button>
+        </div>
+        </div>
+        
+
+        <div class="error-feedback" *ngIf="hasDisplayableError('password')">
+            <ng-container [ngSwitch]="form.controls.password.errors | firstKey">
+                <div class="error-feedback" *ngSwitchCase="'required'">Please enter the your Password</div>
+            
+                <div class="error-feedback" *ngSwitchCase="'minlength'">Atleast 6 characters required</div>
+                
+                <div class="error-feedback" *ngSwitchCase="'pattern'">Atleast one or more special character(s)</div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="mb-3">
+        <input class="form-control bg-body-secondary" 
+        placeholder="ConfirmPassword" formControlName="confirmPassword">
+        <div class="error-feedback" *ngIf="hasDisplayableError('confirmPassword') && form.controls.confirmPassword.hasError('passwordMismatch')">Passwords doesnt match</div>
+    </div>
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success w-100 rounded-3">Register</button>
+    </div>
+</form>
